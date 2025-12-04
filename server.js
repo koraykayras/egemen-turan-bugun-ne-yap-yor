@@ -64,4 +64,16 @@ app.post("/admin-save", (req, res) => {
 
 app.listen(3000, () => {
   console.log("Site çalışıyor → http://localhost:3000");
+  const ARCHIVE_PATH = path.join(__dirname, "data", "archive.json");
+
+app.get("/get-archive", (req, res) => {
+  if (!fs.existsSync(ARCHIVE_PATH)) {
+    return res.json([]);
+  }
+
+  const data = fs.readFileSync(ARCHIVE_PATH, "utf-8");
+  const archive = JSON.parse(data);
+  res.json(archive.reverse()); // en yeni en üstte
+});
+
 });
