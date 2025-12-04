@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Egemen Turan Bugün Ne Yapıyor?</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>Egemen Turan Bugün Ne Yapıyor?</h1>
+    <p id="content">Yükleniyor...</p>
+  </div>
+
+  <a class="admin-link" href="/admin.html">admin</a>
+
+ <script>
+  function loadPost() {
+    fetch("/get-post")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("content").innerText =
+          data.date + " — " + data.text;
+      });
+  }
+
+  // Sayfa açılınca hemen çek
+  loadPost();
+
+  // Her 2 saniyede bir otomatik yenile
+  setInterval(loadPost, 2000);
+</script>
+
+
+</body>
+</html>

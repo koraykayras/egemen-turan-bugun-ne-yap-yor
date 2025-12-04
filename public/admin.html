@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>Admin Panel</h2>
+
+    <input type="password" id="password" placeholder="Şifre"
+      style="width:100%; padding:10px; margin-bottom:15px;">
+
+    <textarea id="text" rows="6" placeholder="Bugün ne yaptı?"
+      style="width:100%; padding:10px;"></textarea><br><br>
+
+    <button onclick="savePost()"
+      style="padding:10px 30px; border:none; background:#00ffcc; cursor:pointer;">
+      Kaydet
+    </button>
+  </div>
+
+  <!-- Sağ alt uyarı -->
+  <div id="toast" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: black;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: none;
+  "></div>
+
+  <script>
+    function showToast(msg, color) {
+      const toast = document.getElementById("toast");
+      toast.innerText = msg;
+      toast.style.background = color;
+      toast.style.display = "block";
+
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 2500);
+    }
+
+    function savePost() {
+      const password = document.getElementById("password").value;
+      const text = document.getElementById("text").value;
+
+      fetch("/admin-save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ password, text })
+      })
+      .then(res => res.text())
+      .then(data => {
+        if (data === "HATALI ŞİFRE") {
+          showToast("Şifre Hatalı", "darkred");
+        } else {
+          showToast("Kaydedildi", "green");
+          document.getElementById("text").value = "";
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
